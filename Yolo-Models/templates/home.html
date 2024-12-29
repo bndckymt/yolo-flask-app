@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time YOLO Detection</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold">Real-Time YOLO Detection</h1>
+            <p class="lead">Select a YOLO model and view real-time object detection from your camera feed.</p>
+        </div>
+
+        <!-- Model Selection Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4">Select a Model</h2>
+                <form action="/select_model" method="POST" class="mt-3">
+                    <div class="mb-3">
+                        <label for="model" class="form-label">Choose a model:</label>
+                        <select name="model" id="model" class="form-select">
+                            {% for model in models %}
+                            <option value="{{ model }}" {% if model == selected_model %}selected{% endif %}>
+                                {{ model }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Load Model</button>
+                </form>
+                <div class="mt-3">
+                    <h5>Current Model: <span class="text-info">{{ selected_model if selected_model else "None" }}</span></h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Stream Section -->
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h2 class="h4 mb-3">Live Video Stream</h2>
+                {% if selected_model %}
+                <img src="{{ url_for('video_feed') }}" alt="Video Stream" class="img-fluid rounded shadow">
+                {% else %}
+                <p class="text-danger">Please select a model to start the video stream.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional for interactivity) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
